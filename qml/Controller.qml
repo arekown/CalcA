@@ -23,6 +23,10 @@ QtObject {
     property var keys: []
     property var trigKeys: []
 
+    // Connect the engine while the object is being created: property initialisers of all objects
+    // run before any Component.onCompleted, whose order between objects is not defined.
+    readonly property bool engineReady: { Logic.init(Engine); return true }
+
     readonly property string errorText: error === "div0" ? qsTr("Cannot divide by zero")
                                       : error === "overflow" ? qsTr("Overflow")
                                       : error === "timeout" ? qsTr("Calculation takes too long")
@@ -66,8 +70,5 @@ QtObject {
         }
     }
 
-    Component.onCompleted: {
-        Logic.init(Engine)
-        refresh()
-    }
+    Component.onCompleted: refresh()
 }

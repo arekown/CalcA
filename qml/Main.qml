@@ -56,7 +56,7 @@ Window {
         MouseArea { id: mbMa; anchors.fill: parent; hoverEnabled: true; onClicked: mb.clicked() }
     }
 
-    Controller { id: calc }
+    Controller { id: calc; objectName: "calc" }
 
     Settings {
         id: settings

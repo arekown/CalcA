@@ -30,6 +30,8 @@ class TstCalc : public QObject
 private slots:
     void initTestCase()
     {
+        QCoreApplication::setOrganizationName(QStringLiteral("CalcA-Test"));
+        QCoreApplication::setApplicationName(QStringLiteral("CalcA-Test"));
         QLocale::setDefault(QLocale(QLocale::German, QLocale::Germany));
         QQmlComponent comp(&m_engine);
         comp.setData("import CalcA\nController {}", QUrl());
@@ -91,6 +93,20 @@ private slots:
         QCOMPARE(m_calc->property("displayText").toString(), QStringLiteral("1111 1111"));
         QMetaObject::invokeMethod(m_calc.get(), "cycleBase");
         QCOMPARE(m_calc->property("displayText").toString(), QStringLiteral("255"));
+    }
+
+    void startupShowsZero()
+    {
+        // Load the real main window: no error may be shown before the first key press.
+        QQmlEngine engine;
+        QQmlComponent comp(&engine);
+        comp.loadFromModule("CalcA", "Main");
+        QScopedPointer<QObject> win(comp.create());
+        QVERIFY2(win, qPrintable(comp.errorString()));
+        QObject *c = win->findChild<QObject *>(QStringLiteral("calc"));
+        QVERIFY(c);
+        QCOMPARE(c->property("error").toString(), QString());
+        QCOMPARE(c->property("displayText").toString(), QStringLiteral("0"));
     }
 
     void historyRecall()
