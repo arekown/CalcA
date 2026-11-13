@@ -1,0 +1,14 @@
+[Desktop Entry]
+Type=Application
+Name=CalcA
+GenericName=Calculator
+GenericName[de]=Taschenrechner
+Comment=Standard and scientific calculator with HEX and BIN
+Comment[de]=Standard- und wissenschaftlicher Taschenrechner mit HEX und BIN
+Exec=@CMAKE_INSTALL_FULL_BINDIR@/calca
+Icon=io.github.arekown.CalcA
+Terminal=false
+StartupNotify=true
+Categories=Utility;Calculator;Qt;
+Keywords=calc;calculator;math;scientific;hex;binary;
+Keywords[de]=calc;rechner;taschenrechner;mathe;wissenschaftlich;hex;binär;

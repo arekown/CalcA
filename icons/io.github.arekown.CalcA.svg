@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <defs>
+    <linearGradient id="eq" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ff2a6d"/>
+      <stop offset="1" stop-color="#b81e4f"/>
+    </linearGradient>
+  </defs>
+  <rect x="12" y="12" width="232" height="232" rx="30" fill="#0a0e1a" stroke="#05d9e8" stroke-opacity="0.45" stroke-width="4"/>
+  <!-- display -->
+  <rect x="40" y="40" width="176" height="54" fill="#121a2c"/>
+  <rect x="112" y="60" width="86" height="16" fill="#05d9e8"/>
+  <rect x="40" y="94" width="176" height="3" fill="#ff2a6d" opacity="0.8"/>
+  <!-- keys -->
+  <polygon points="40,112 122,112 122,154 114,162 40,162" fill="#121a2c"/>
+  <polygon points="134,112 216,112 216,154 208,162 134,162" fill="#0c1222"/>
+  <polygon points="40,174 122,174 122,208 114,216 40,216" fill="#0c1222"/>
+  <polygon points="142,174 216,174 216,208 208,216 134,216 134,182" fill="url(#eq)"/>
+  <!-- glyphs: + − = -->
+  <rect x="71" y="134" width="20" height="6" fill="#05d9e8"/>
+  <rect x="78" y="127" width="6" height="20" fill="#05d9e8"/>
+  <rect x="165" y="134" width="20" height="6" fill="#05d9e8"/>
+  <rect x="71" y="192" width="20" height="6" fill="#05d9e8"/>
+  <rect x="164" y="186" width="22" height="6" fill="#ffffff"/>
+  <rect x="164" y="198" width="22" height="6" fill="#ffffff"/>
+  <!-- corner brackets -->
+  <path d="M28 52 V28 H52 M204 28 H228 V52" fill="none" stroke="#05d9e8" stroke-width="5"/>
+  <path d="M28 204 V228 H52 M204 228 H228 V204" fill="none" stroke="#ff2a6d" stroke-width="5"/>
+</svg>
