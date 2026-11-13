@@ -3,7 +3,10 @@
 #include <QLocale>
 #include <QQmlComponent>
 #include <QQmlEngine>
+#include <QQuickItem>
+#include <QQuickWindow>
 #include <QScopedPointer>
+#include <functional>
 #include <QtQml/qqmlextensionplugin.h>
 #include <QtTest>
 
@@ -112,6 +115,37 @@ private slots:
         QVERIFY(c);
         QCOMPARE(c->property("error").toString(), QString());
         QCOMPARE(c->property("displayText").toString(), QStringLiteral("0"));
+    }
+
+    void keysReenableAfterBin()
+    {
+        // BIN greys out 2-9; switching back to DEC must enable them again in the real window.
+        QQmlEngine engine;
+        QQmlComponent comp(&engine);
+        comp.loadFromModule("CalcA", "Main");
+        QScopedPointer<QObject> win(comp.create());
+        QVERIFY2(win, qPrintable(comp.errorString()));
+        QObject *c = win->findChild<QObject *>(QStringLiteral("calc"));
+        QVERIFY(c);
+        // Repeater delegates live in the visual item tree, not in the QObject tree
+        auto *window = qobject_cast<QQuickWindow *>(win.get());
+        QVERIFY(window);
+        std::function<QQuickItem *(QQuickItem *, const QString &)> findKey = [&](QQuickItem *it, const QString &action) -> QQuickItem * {
+            if (it->property("action").toString() == action) return it;
+            for (QQuickItem *child : it->childItems())
+                if (QQuickItem *k = findKey(child, action)) return k;
+            return nullptr;
+        };
+        auto keyActive = [&](const QString &action) {
+            QQuickItem *k = findKey(window->contentItem(), action);
+            if (!k) qFatal("key %s not found", qPrintable(action));
+            return k->property("active").toBool();
+        };
+        QMetaObject::invokeMethod(c, "setBase", Q_ARG(QVariant, QStringLiteral("BIN")));
+        QVERIFY(!keyActive(QStringLiteral("d:5")));
+        QMetaObject::invokeMethod(c, "setBase", Q_ARG(QVariant, QStringLiteral("DEC")));
+        QVERIFY(keyActive(QStringLiteral("d:5")));
+        QVERIFY(keyActive(QStringLiteral("dot")));
     }
 
     void historyRecall()

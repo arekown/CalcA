@@ -399,13 +399,6 @@ function trigDefs() {
     const sup = S.trigInv ? '<sup>-1</sup>' : '', h = S.hyp ? 'h' : '';
     return ['sin', 'cos', 'tan', 'sec', 'csc', 'cot'].map(n => [n + h + sup, 't:' + n, 'fn', false]);
 }
-function keyEnabled(a, keep) {
-    if (S.err && !keep) return false;
-    if (S.base !== 'DEC' && (a === 'dot' || a === 'exp')) return false;
-    if (S.base === 'BIN' && /^d:[2-9]$/.test(a)) return false;
-    return true;
-}
-
 // Snapshot of everything the view needs.
 function view() {
     let display = '0';

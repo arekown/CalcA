@@ -45,7 +45,14 @@ QtObject {
     function clearHistory() { Logic.clearHistory(); refresh() }
     function clearMemory() { Logic.clearMemory(); refresh() }
     function paste(text) { const ok = Logic.paste(text); refresh(); return ok }
-    function keyEnabled(a, keep) { return Logic.keyEnabled(a, keep) }
+    // Reads base and error first, so bindings that call this always depend on both.
+    function keyEnabled(a, keep) {
+        const b = base, err = error
+        if (err !== "" && !keep) return false
+        if (b !== "DEC" && (a === "dot" || a === "exp")) return false
+        if (b === "BIN" && /^d:[2-9]$/.test(a)) return false
+        return true
+    }
 
     function refresh() {
         const v = Logic.view()

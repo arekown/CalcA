@@ -394,7 +394,7 @@ Window {
                         action: modelData[1]
                         kind: modelData[2]
                         on: modelData[1] === "2nd" && calc.second
-                        active: calc.keyEnabled(modelData[1], modelData[3]) && (calc.error === "" || modelData[3]) && calc.base.length > 0
+                        active: calc.keyEnabled(modelData[1], modelData[3])
                         onTriggered: (a) => win.press(a)
                     }
                 }
