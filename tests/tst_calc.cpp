@@ -1,5 +1,5 @@
-// SPDX-License-Identifier: GPL-2.0-or-later
-// Drives the real Controller (logic.js + libqalculate engine) with key sequences.
+// SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0
+// Drives the real Controller (logic.js + GMP/MPFR engine) with key sequences.
 #include <QLocale>
 #include <QQmlComponent>
 #include <QQmlEngine>
@@ -73,6 +73,11 @@ private slots:
         row("exp entry", "DEC", "sci", "d:1 dot d:5 exp d:3 o:+ d:1 eq", "1.501");
         row("yroot", "DEC", "sci", "d:8 o:root d:3 eq", "2");
         row("mod", "DEC", "sci", "d:7 neg o:mod d:3 eq", "-1");
+        row("sin 180 deg is zero", "DEC", "sci", "d:1 d:8 d:0 t:sin", "0");
+        row("sqrt 2 squared", "DEC", "sci", "d:2 u:sqrt u:sqr", "2");
+        row("log base 2 of 8", "DEC", "sci", "d:8 o:logy d:2 eq", "3");
+        row("cube root of -8", "DEC", "sci", "d:8 neg u:cbrt", "-2");
+        row("factorial overflow", "DEC", "sci", "d:3 d:2 d:4 d:9 u:fact", "ERR:overflow");
     }
 
     void keys()
@@ -116,6 +121,12 @@ private slots:
         QVERIFY(!hist.isEmpty());
         QCOMPARE(hist.first().toMap().value("text").toString(), QStringLiteral("42"));
         QCOMPARE(hist.first().toMap().value("expr").toString(), QStringLiteral("6 × 7 ="));
+
+        // a HEX calculation keeps showing its result in HEX, also after switching back to DEC
+        run(QStringLiteral("HEX"), QStringLiteral("std"), QStringLiteral("d:F d:F o:* d:1 d:0 eq"));
+        QMetaObject::invokeMethod(m_calc.get(), "setBase", Q_ARG(QVariant, QStringLiteral("DEC")));
+        const QVariantMap h = m_calc->property("history").toList().first().toMap();
+        QCOMPARE(h.value("expr").toString() + u' ' + h.value("text").toString(), QStringLiteral("FF × 10 = FF0"));
     }
 };
 

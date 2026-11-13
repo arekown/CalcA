@@ -1,8 +1,8 @@
-// SPDX-License-Identifier: GPL-2.0-or-later
+// SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0
 .pragma library
 
 // CalcA input state machine (behaves like the Windows calculator).
-// Values are exact strings in libqalculate syntax; all arithmetic goes through the engine.
+// Values are exact number strings ("1/3", "-42", "0xFF"); all arithmetic goes through the engine.
 
 let E = null; // Engine singleton, set by init()
 
@@ -28,12 +28,13 @@ function fn(name, x) { return check(E.fn(name, x, S.angle)); }
 function digits() { return S.mode === 'std' ? 16 : 32; }
 
 const fmtCache = new Map();
-function fmt(v) {
-    const key = v + '|' + S.base + '|' + S.fe + '|' + digits();
+function fmt(v, base) {
+    base = base || S.base;
+    const key = v + '|' + base + '|' + S.fe + '|' + digits();
     let s = fmtCache.get(key);
     if (s === undefined) {
         if (fmtCache.size > 2000) fmtCache.clear();
-        s = E.format(v, RADIX[S.base], S.fe, digits());
+        s = E.format(v, RADIX[base], S.fe, digits());
         fmtCache.set(key, s);
     }
     return s;
@@ -237,7 +238,7 @@ function rparen() {
     S.tokens.push({ t: ')' });
 }
 function finish(r, ex) {
-    S.hist.unshift({ expr: ex, v: r });
+    S.hist.unshift({ expr: ex, v: r, base: S.base }); // shown in the base it was calculated in
     if (S.hist.length > MAX_HISTORY) S.hist.pop();
     Object.assign(S, { lastExpr: ex, tokens: [], entry: { typed: false, v: r, label: fmt(r) }, done: true });
 }
@@ -340,6 +341,7 @@ function memoryItem(i, m) {
 function recallMemory(i) { S.err = ''; constant(S.mem[i]); }
 function recallHistory(i) {
     const h = S.hist[i];
+    S.base = h.base; // expression and value stay in the same number system
     Object.assign(S, { err: '', tokens: [], lastOp: null, lastExpr: h.expr, done: true,
                        entry: { typed: false, v: h.v, label: fmt(h.v) } });
 }
@@ -420,7 +422,7 @@ function view() {
             : tokensLabel(S.tokens) + (l && !l.typed && !l.quiet ? (S.tokens.length ? ' ' : '') + l.label : ''),
         canClearEntry: !!(S.entry && !S.done && !S.err),
         mode: S.mode, base: S.base, angle: S.angle, fe: S.fe, second: S.second, trigInv: S.trigInv, hyp: S.hyp,
-        hist: S.hist.map(h => ({ expr: h.expr, text: fmt(h.v) })),
+        hist: S.hist.map(h => ({ expr: h.expr, text: fmt(h.v, h.base) })),
         mem: S.mem.map(v => fmt(v))
     };
 }

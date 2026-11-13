@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: GPL-2.0-or-later
+// SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0
 import QtQuick
 import CalcA
 
@@ -14,6 +14,7 @@ Item {
     property string family: Theme.num
     property int pixelSize: 14
     property real letterSpacing: 0.8
+    property int capitalization: Font.MixedCase
     signal clicked()
 
     implicitWidth: label.implicitWidth + 20
@@ -36,6 +37,7 @@ Item {
         font.pixelSize: b.pixelSize
         font.weight: Font.DemiBold
         font.letterSpacing: b.letterSpacing
+        font.capitalization: b.capitalization
     }
 
     MouseArea {

@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: GPL-2.0-or-later
+// SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Effects
@@ -208,7 +208,8 @@ Window {
                     font.family: Theme.num
                     font.weight: calc.error !== "" ? Font.Medium : Font.DemiBold
                     font.pixelSize: calc.error !== "" ? 30 : (calc.mode === "std" ? 60 : 52)
-                    layer.enabled: true
+                    // the glow needs a hardware graphics API; the software renderer would hide the text
+                    layer.enabled: GraphicsInfo.api !== GraphicsInfo.Software
                     layer.effect: MultiEffect {
                         shadowEnabled: true
                         shadowColor: calc.error !== "" ? "#66ff2a6d" : "#5905d9e8"
@@ -288,6 +289,7 @@ Window {
                         family: Theme.head
                         pixelSize: 10
                         letterSpacing: 1.4
+                        capitalization: Font.AllUppercase
                         open: win.popup === "trig"
                         onClicked: win.popup = win.popup === "trig" ? "" : "trig"
                     }
@@ -297,6 +299,7 @@ Window {
                         family: Theme.head
                         pixelSize: 10
                         letterSpacing: 1.4
+                        capitalization: Font.AllUppercase
                         open: win.popup === "func"
                         onClicked: win.popup = win.popup === "func" ? "" : "func"
                     }
@@ -347,6 +350,7 @@ Window {
             GridLayout { // A-F
                 visible: calc.base === "HEX"
                 Layout.fillWidth: true
+                Layout.fillHeight: false // nested layouts fill by default; the keypad gets the space
                 Layout.preferredHeight: 48
                 Layout.leftMargin: 6
                 Layout.rightMargin: 6

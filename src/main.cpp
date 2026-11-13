@@ -1,5 +1,6 @@
-// SPDX-License-Identifier: GPL-2.0-or-later
-#include <QFontDatabase>
+// SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0
+#include "appsetup.h"
+
 #include <QGuiApplication>
 #include <QIcon>
 #include <QLocale>
@@ -17,14 +18,7 @@ int main(int argc, char *argv[])
     QGuiApplication::setApplicationVersion(QStringLiteral(CALCA_VERSION));
     QGuiApplication::setDesktopFileName(QStringLiteral("io.github.arekown.CalcA"));
     QGuiApplication::setWindowIcon(QIcon(QStringLiteral(":/qt/qml/CalcA/icons/io.github.arekown.CalcA.svg")));
-
-    const QStringList fonts = {
-        QStringLiteral("Orbitron-Variable.ttf"), QStringLiteral("Rajdhani-Medium.ttf"),
-        QStringLiteral("Rajdhani-SemiBold.ttf"), QStringLiteral("Rajdhani-Bold.ttf"),
-        QStringLiteral("ShareTechMono-Regular.ttf"),
-    };
-    for (const QString &f : fonts)
-        QFontDatabase::addApplicationFont(QStringLiteral(":/qt/qml/CalcA/fonts/") + f);
+    loadBundledFonts();
 
     // UI language follows the system language; English is the built-in fallback.
     QTranslator translator;

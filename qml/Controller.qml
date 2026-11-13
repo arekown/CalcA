@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: GPL-2.0-or-later
+// SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0
 import QtQuick
 import CalcA
 import "logic.js" as Logic
@@ -29,7 +29,6 @@ QtObject {
 
     readonly property string errorText: error === "div0" ? qsTr("Cannot divide by zero")
                                       : error === "overflow" ? qsTr("Overflow")
-                                      : error === "timeout" ? qsTr("Calculation takes too long")
                                       : error !== "" ? qsTr("Invalid input") : ""
 
     function act(a) { Logic.act(a); refresh() }
